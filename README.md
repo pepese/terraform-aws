@@ -31,4 +31,11 @@ https://blog.pepese.com/terraform-naming/
 
 ### AWS リソースサンプル
 
-ToDo
+- `jenkins-sample`
+  - 要メンテ
+- `web3layer-sample`
+  - 要メンテ
+- `web3layer-asg-sample`
+  - 要メンテ
+- `ecs-sample`
+  - 要メンテ
