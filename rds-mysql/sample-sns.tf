@@ -1,13 +1,13 @@
 #####################################
 # SNS Topic
 #####################################
-resource "aws_sns_topic" "alarm_topic" {
+resource "aws_sns_topic" "alarm" {
   name = "${var.base_name}-alarm-topic"
   tags = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-alarm-topic" }))
 }
 
-resource "aws_sns_topic_policy" "alarm_topic_policy" {
-  arn    = aws_sns_topic.alarm_topic.arn
+resource "aws_sns_topic_policy" "alarm_policy" {
+  arn    = aws_sns_topic.alarm.arn
   policy = data.aws_iam_policy_document.sns_topic_policy.json
 }
 
@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "sns_topic_policy" {
       ]
     }
     resources = [
-      aws_sns_topic.alarm_topic.arn,
+      aws_sns_topic.alarm.arn,
     ]
     sid = "__default_statement_ID"
   }
@@ -43,8 +43,8 @@ data "aws_iam_policy_document" "sns_topic_policy" {
 #####################################
 # SNS Topic Subscription
 #####################################
-resource "aws_sns_topic_subscription" "alarm_topic_subscription_mail" {
-  topic_arn = aws_sns_topic.alarm_topic.arn
+resource "aws_sns_topic_subscription" "alarm_subscription_mail" {
+  topic_arn = aws_sns_topic.alarm.arn
   protocol  = "email"
   endpoint  = var.cloudwatch_settings["alarm_mail"]
 }

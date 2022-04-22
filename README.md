@@ -31,6 +31,11 @@ https://blog.pepese.com/terraform-naming/
 
 ### AWS リソースサンプル
 
+- `ec2-asg-apache`
+  - Auto Scaling Group 設定をした EC2 上に User Data で Apache と CloudWatch Agent を設定するプロジェクトです
+  - ベースプロジェクトは `basic-flat`
+- `rds-mysql`
+  - 要メンテ
 - `jenkins-sample`
   - 要メンテ
 - `web3layer-sample`

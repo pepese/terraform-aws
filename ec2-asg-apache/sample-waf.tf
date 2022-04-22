@@ -1,8 +1,8 @@
 #####################################
 # WAF
 #####################################
-resource "aws_wafv2_web_acl" "waf" {
-  name  = "${var.base_name}-waf"
+resource "aws_wafv2_web_acl" "sample" {
+  name  = "${local.base_name}-waf"
   scope = "REGIONAL"
 
   default_action {
@@ -112,17 +112,17 @@ resource "aws_wafv2_web_acl" "waf" {
 
   visibility_config {
     cloudwatch_metrics_enabled = false
-    metric_name                = "${var.base_name}-waf"
+    metric_name                = "${local.base_name}-waf"
     sampled_requests_enabled   = false
   }
 
-  tags = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-waf" }))
+  tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample" }))
 }
 
 #####################################
 # WAF Association
 #####################################
-resource "aws_wafv2_web_acl_association" "waf_association_lb" {
-  resource_arn = aws_lb.lb.arn
-  web_acl_arn  = aws_wafv2_web_acl.waf.arn
+resource "aws_wafv2_web_acl_association" "sample" {
+  resource_arn = aws_lb.sample.arn
+  web_acl_arn  = aws_wafv2_web_acl.sample.arn
 }
