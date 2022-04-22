@@ -39,3 +39,5 @@ https://blog.pepese.com/terraform-naming/
   - 要メンテ
 - `ecs-sample`
   - 要メンテ
+- `eks-sample`
+  - 要メンテ
