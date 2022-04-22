@@ -2,17 +2,17 @@
 # Terraform Settings
 #####################################
 terraform {
-  required_version = "~> 1.1.0"
-  required_providers {
+  required_version = "~> 1.1.0" // Terraform のバージョン
+  required_providers {          // Provider の設定
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.0"
+      version = "~> 3.0"        // AWS Provider のバージョン
     }
   }
-  backend "s3" {
-    bucket = "tfstate-pepese"
-    key    = "prd/terraform.tfstate"
-    region = "ap-northeast-1"
+  backend "s3" {                     // この設定で State ファイルが S3 に保存されます
+    bucket = "tfstate-pepese"        // State ファイルを配置するバケット
+    key    = "prd/terraform.tfstate" // State ファイルを配置するパス・ファイル名
+    region = "ap-northeast-1"        // S3のリージョン
   }
 }
 
@@ -22,7 +22,7 @@ terraform {
 provider "aws" {
   region  = var.region
   profile = var.profile
-  default_tags {
+  default_tags { // AWS リソースへのデフォルトタグの設定
     tags = {
       System    = var.system
       Env       = var.env

@@ -4,7 +4,7 @@
 
 ```bash
 basic-flat-env/
-├── main.tf        # Terraformバージョン、Provider、Backend、変数、locals変数、Module、Outputsの設定
+├── main.tf        # Terraformバージョン、Provider、Backend、変数、locals変数、Outputsの設定
 │
 ├── sample-vpc.tf  # resource（sampleサービスのVPC） の設定を記述
 ├── ...            # resource（その他） の設定を記述
