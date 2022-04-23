@@ -59,6 +59,7 @@ locals {
   ec2_settings = {
     ami           = "ami-03d79d440297083e3" # Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD Volume Type
     instance_type = "t3.nano"
+    az            = "ap-northeast-1a"
   }
 
   // RDS

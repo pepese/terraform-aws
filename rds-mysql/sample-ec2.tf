@@ -30,10 +30,35 @@ resource "aws_instance" "sample_ec2" {
   sudo chmod 644 /etc/sysconfig/clock
   sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
   echo '=== End TimeZone Settings ==='
+  
+  #echo '=== Start Mount Settings ==='
+  #sudo mkfs -t ext4 /dev/xvdh
+  #sudo mkdir /data
+  #sudo mount /dev/xvdh /data
+  #echo '/dev/xvdh /data ext4 defaults,nofail 0 2' >> /etc/fstab
+  #echo '=== End Mount Settings ==='
   EOF
 
   tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-ec2" }))
 }
+
+#####################################
+# EBS Settings
+#####################################
+/*
+resource "aws_ebs_volume" "sample_ec2" {
+  availability_zone = local.ec2_settings["az"]
+  type              = "gp2"
+  size              = 20
+
+  tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-ec2" }))
+}
+
+resource "aws_volume_attachment" "sample_ec2" {
+  device_name = "/dev/xvdh"
+  volume_id   = aws_ebs_volume.sample_ec2.id
+  instance_id = aws_instance.sample_ec2.id
+}*/
 
 #####################################
 # Security Group Settings
