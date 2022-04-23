@@ -2,17 +2,17 @@
 # CloudWatch Log Group
 #####################################
 resource "aws_cloudwatch_log_group" "sample_ec2_messages" {
-  name = "${local.system}/${local.env}/sample/ec2/messages"
+  name = "/${local.system}/${local.env}/sample/ec2/messages"
   tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-ec2-messages" }))
 }
 
 resource "aws_cloudwatch_log_group" "sample_ec2_apache_access_log" {
-  name = "${local.system}/${local.env}/sample/ec2/apache_access_log"
+  name = "/${local.system}/${local.env}/sample/ec2/apache_access_log"
   tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-ec2-apache-access-log" }))
 }
 
 resource "aws_cloudwatch_log_group" "sample_ec2_apache_error_log" {
-  name = "${local.system}/${local.env}/sample/ec2/apache_error_log"
+  name = "/${local.system}/${local.env}/sample/ec2/apache_error_log"
   tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-ec2-apache-error-log" }))
 }
 
