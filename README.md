@@ -35,12 +35,11 @@ https://blog.pepese.com/terraform-naming/
   - Auto Scaling Group 設定をした EC2 上に User Data で Apache と CloudWatch Agent を設定するプロジェクトです
   - ベースプロジェクトは `basic-flat`
 - `rds-mysql`
-  - 要メンテ
+  - RDS for MySQL と DB アクセス用の簡易な Bastion のサンプルプロジェクトです
+  - ベースプロジェクトは `basic-flat`
 - `jenkins-sample`
   - 要メンテ
 - `web3layer-sample`
-  - 要メンテ
-- `web3layer-asg-sample`
   - 要メンテ
 - `ecs-sample`
   - 要メンテ

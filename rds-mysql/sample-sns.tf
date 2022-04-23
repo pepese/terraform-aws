@@ -2,30 +2,29 @@
 # SNS Topic
 #####################################
 resource "aws_sns_topic" "alarm" {
-  name = "${var.base_name}-alarm-topic"
-  tags = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-alarm-topic" }))
+  name = "${local.base_name}-alarm"
+  tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-alarm" }))
 }
 
-resource "aws_sns_topic_policy" "alarm_policy" {
+resource "aws_sns_topic_policy" "alarm" {
   arn    = aws_sns_topic.alarm.arn
-  policy = data.aws_iam_policy_document.sns_topic_policy.json
+  policy = data.aws_iam_policy_document.sns_topic.json
 }
 
-data "aws_iam_policy_document" "sns_topic_policy" {
-  policy_id = "__default_policy_ID"
+data "aws_iam_policy_document" "sns_topic" {
   statement {
     actions = [
       "SNS:Subscribe",
       "SNS:Receive",
       "SNS:Publish",
     ]
-    condition {
-      test     = "StringEquals"
-      variable = "AWS:SourceOwner"
-      values = [
-        var.account_id,
-      ]
-    }
+    # condition {
+    #   test     = "StringEquals"
+    #   variable = "AWS:SourceOwner"
+    #   values = [
+    #     local.account_id,
+    #   ]
+    # }
     effect = "Allow"
     principals {
       type = "Service"
@@ -36,15 +35,14 @@ data "aws_iam_policy_document" "sns_topic_policy" {
     resources = [
       aws_sns_topic.alarm.arn,
     ]
-    sid = "__default_statement_ID"
   }
 }
 
 #####################################
 # SNS Topic Subscription
 #####################################
-resource "aws_sns_topic_subscription" "alarm_subscription_mail" {
+resource "aws_sns_topic_subscription" "alarm_mail" {
   topic_arn = aws_sns_topic.alarm.arn
   protocol  = "email"
-  endpoint  = var.cloudwatch_settings["alarm_mail"]
+  endpoint  = local.cloudwatch_settings["alarm_mail"]
 }

@@ -1,67 +1,67 @@
 #####################################
 # RDS
 #####################################
-resource "aws_db_instance" "rds" {
+resource "aws_db_instance" "sample" {
   # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance
-  identifier           = "${var.base_name}-rds" # name ではなくこちら（小文字英字・数字・ハイフン、ユニーク）
-  allocated_storage    = var.rds_settings["allocated_storage"]
-  engine               = var.rds_settings["engine"]
-  engine_version       = var.rds_settings["engine_version"]
-  instance_class       = var.rds_settings["instance_class"]
-  username             = var.rds_settings["username"]
-  password             = var.rds_settings["password"]
-  db_subnet_group_name = aws_db_subnet_group.rds_dbsg.name
-  parameter_group_name = aws_db_parameter_group.rds_dbpg.name
+  identifier           = "${local.base_name}-sample" # name ではなくこちら（小文字英字・数字・ハイフン、ユニーク）
+  allocated_storage    = local.rds_settings["allocated_storage"]
+  engine               = local.rds_settings["engine"]
+  engine_version       = local.rds_settings["engine_version"]
+  instance_class       = local.rds_settings["instance_class"]
+  username             = local.rds_settings["username"]
+  password             = local.rds_settings["password"]
+  db_subnet_group_name = aws_db_subnet_group.sample.name
+  parameter_group_name = aws_db_parameter_group.sample.name
   vpc_security_group_ids = [
-    aws_security_group.rds_sg.id,
+    aws_security_group.sample_rds.id,
   ]
   skip_final_snapshot     = true
   multi_az                = true
-  monitoring_interval     = 30                            # 拡張モニタリング
-  monitoring_role_arn     = aws_iam_role.rds_iam_role.arn # 拡張モニタリング
-  backup_retention_period = "7"                           # 最大7日間保管するバックアップを
-  backup_window           = "00:00-01:00"                 # 毎日深夜の0:00に取得する
-  apply_immediately       = "true"                        # terraform applyを実行直後にDBへの変更が適用される
-  tags                    = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-rds" }))
+  monitoring_interval     = 30                          # 拡張モニタリング
+  monitoring_role_arn     = aws_iam_role.sample_rds.arn # 拡張モニタリング
+  backup_retention_period = "7"                         # 最大7日間保管するバックアップを
+  backup_window           = "00:00-01:00"               # 毎日深夜の0:00に取得する
+  apply_immediately       = "true"                      # terraform applyを実行直後にDBへの変更が適用される
+  tags                    = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample" }))
 }
 
 #####################################
 # DB Subnet Group
 #####################################
-resource "aws_db_subnet_group" "rds_dbsg" {
-  name = "${var.base_name}-rds-dbsg"
+resource "aws_db_subnet_group" "sample" {
+  name = "${local.base_name}-sample"
   subnet_ids = [
-    aws_subnet.private_1a.id,
-    aws_subnet.private_1c.id,
+    aws_subnet.sample_private_1a.id,
+    aws_subnet.sample_private_1c.id,
   ]
 
-  tags = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-rds-dbsg" }))
+  tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample" }))
 }
 
 #####################################
 # Security Group
 #####################################
-resource "aws_security_group" "rds_sg" {
-  name   = "${var.base_name}-rds-sg"
-  vpc_id = aws_vpc.vpc.id
-  tags   = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-rds-sg" }))
+resource "aws_security_group" "sample_rds" {
+  name   = "${local.base_name}-sample-rds"
+  vpc_id = aws_vpc.sample.id
+  tags   = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-rds" }))
 }
 
-resource "aws_security_group_rule" "rds_sg_ingress_rule" {
-  security_group_id = aws_security_group.rds_sg.id
+resource "aws_security_group_rule" "sample_rds_ingress" {
+  security_group_id = aws_security_group.sample_rds.id
 
   type                     = "ingress"
   from_port                = 3306
   to_port                  = 3306
   protocol                 = "tcp"
-  source_security_group_id = aws_security_group.ec2_sg.id
+  source_security_group_id = aws_security_group.sample_ec2.id
 }
 
 #####################################
 # Parameter Group
 #####################################
-resource "aws_db_parameter_group" "rds_dbpg" {
-  name   = "${var.base_name}-db-parameter-group"
+resource "aws_db_parameter_group" "sample" {
+  name   = "${local.base_name}-sample"
   family = "mysql5.7"
 
   parameter {
@@ -144,13 +144,20 @@ resource "aws_db_parameter_group" "rds_dbpg" {
     apply_method = "pending-reboot"
   }
 
-  tags = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-db-parameter-group" }))
+  tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample" }))
 }
 
 #####################################
-# Data: IAM Policy Document
+# IAM Settings
 #####################################
-data "aws_iam_policy_document" "rds_iam_policy" {
+resource "aws_iam_role" "sample_rds" {
+  name               = "${local.base_name}-sample-rds"
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.sample_rds_assume.json
+  tags               = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-rds" }))
+}
+
+data "aws_iam_policy_document" "sample_rds_assume" {
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
@@ -161,17 +168,7 @@ data "aws_iam_policy_document" "rds_iam_policy" {
   }
 }
 
-#####################################
-# IAM Settings
-#####################################
-resource "aws_iam_role" "rds_iam_role" {
-  name               = "${var.base_name}-rds-iam-role"
-  path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.rds_iam_policy.json
-  tags               = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-rds-iam-role" }))
-}
-
-resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
-  role       = aws_iam_role.rds_iam_role.name
+resource "aws_iam_role_policy_attachment" "sample_rds_monitoring" {
+  role       = aws_iam_role.sample_rds.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }

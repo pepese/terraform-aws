@@ -1,200 +1,182 @@
 #####################################
 # VPC Settings
 #####################################
-resource "aws_vpc" "vpc" {
-  cidr_block                       = var.vpc_settings["vpc_cidr_block"]
-  instance_tenancy                 = "default"
-  enable_dns_support               = true
-  enable_dns_hostnames             = true
-  enable_classiclink               = false
-  enable_classiclink_dns_support   = false
-  assign_generated_ipv6_cidr_block = false
-  tags                             = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-vpc" }))
-}
-
-#####################################
-# VPC DHCP Option Settings
-#####################################
-resource "aws_vpc_dhcp_options" "vpc" {
-  domain_name_servers = ["10.0.0.2", "169.254.169.253"]
-  ntp_servers         = ["169.254.169.123"]
-  tags                = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-vpc" }))
-}
-
-resource "aws_vpc_dhcp_options_association" "vpc" {
-  vpc_id          = aws_vpc.vpc.id
-  dhcp_options_id = aws_vpc_dhcp_options.vpc.id
+resource "aws_vpc" "sample" {
+  cidr_block           = local.vpc_settings["vpc_cidr_block"]
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+  tags                 = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample" }))
 }
 
 #####################################
 # Subnet Settings
 #####################################
-resource "aws_subnet" "public_1a" {
-  vpc_id                          = aws_vpc.vpc.id
+resource "aws_subnet" "sample_public_1a" {
+  vpc_id                          = aws_vpc.sample.id
   availability_zone               = "ap-northeast-1a"
-  cidr_block                      = var.vpc_settings["public_1a_cidr_block"]
+  cidr_block                      = local.vpc_settings["public_1a_cidr_block"]
   map_public_ip_on_launch         = false
   assign_ipv6_address_on_creation = false
-  tags                            = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-subnet-public-1a" }))
+  tags                            = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-public-1a" }))
 }
 
-resource "aws_subnet" "public_1c" {
-  vpc_id                          = aws_vpc.vpc.id
+resource "aws_subnet" "sample_public_1c" {
+  vpc_id                          = aws_vpc.sample.id
   availability_zone               = "ap-northeast-1c"
-  cidr_block                      = var.vpc_settings["public_1c_cidr_block"]
+  cidr_block                      = local.vpc_settings["public_1c_cidr_block"]
   map_public_ip_on_launch         = false
   assign_ipv6_address_on_creation = false
-  tags                            = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-subnet-public-1c" }))
+  tags                            = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-public-1c" }))
 }
 
-resource "aws_subnet" "protected_1a" {
-  vpc_id                          = aws_vpc.vpc.id
+resource "aws_subnet" "sample_protected_1a" {
+  vpc_id                          = aws_vpc.sample.id
   availability_zone               = "ap-northeast-1a"
-  cidr_block                      = var.vpc_settings["protected_1a_cidr_block"]
+  cidr_block                      = local.vpc_settings["protected_1a_cidr_block"]
   map_public_ip_on_launch         = false
   assign_ipv6_address_on_creation = false
-  tags                            = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-subnet-protected-1a" }))
+  tags                            = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-protected-1a" }))
 }
 
-resource "aws_subnet" "protected_1c" {
-  vpc_id                          = aws_vpc.vpc.id
+resource "aws_subnet" "sample_protected_1c" {
+  vpc_id                          = aws_vpc.sample.id
   availability_zone               = "ap-northeast-1c"
-  cidr_block                      = var.vpc_settings["protected_1c_cidr_block"]
+  cidr_block                      = local.vpc_settings["protected_1c_cidr_block"]
   map_public_ip_on_launch         = false
   assign_ipv6_address_on_creation = false
-  tags                            = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-subnet-protected-1c" }))
+  tags                            = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-protected-1c" }))
 }
 
-resource "aws_subnet" "private_1a" {
-  vpc_id                          = aws_vpc.vpc.id
+resource "aws_subnet" "sample_private_1a" {
+  vpc_id                          = aws_vpc.sample.id
   availability_zone               = "ap-northeast-1a"
-  cidr_block                      = var.vpc_settings["private_1a_cidr_block"]
+  cidr_block                      = local.vpc_settings["private_1a_cidr_block"]
   map_public_ip_on_launch         = false
   assign_ipv6_address_on_creation = false
-  tags                            = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-subnet-private-1a" }))
+  tags                            = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-private-1a" }))
 }
 
-resource "aws_subnet" "private_1c" {
-  vpc_id                          = aws_vpc.vpc.id
+resource "aws_subnet" "sample_private_1c" {
+  vpc_id                          = aws_vpc.sample.id
   availability_zone               = "ap-northeast-1c"
-  cidr_block                      = var.vpc_settings["private_1c_cidr_block"]
+  cidr_block                      = local.vpc_settings["private_1c_cidr_block"]
   map_public_ip_on_launch         = false
   assign_ipv6_address_on_creation = false
-  tags                            = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-subnet-private-1c" }))
+  tags                            = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-private-1c" }))
 }
 
-resource "aws_subnet" "management_1a" {
-  vpc_id                          = aws_vpc.vpc.id
+resource "aws_subnet" "sample_management_1a" {
+  vpc_id                          = aws_vpc.sample.id
   availability_zone               = "ap-northeast-1a"
-  cidr_block                      = var.vpc_settings["management_1a_cidr_block"]
+  cidr_block                      = local.vpc_settings["management_1a_cidr_block"]
   map_public_ip_on_launch         = false
   assign_ipv6_address_on_creation = false
-  tags                            = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-subnet-management-1a" }))
+  tags                            = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-management-1a" }))
 }
 
-resource "aws_subnet" "management_1c" {
-  vpc_id                          = aws_vpc.vpc.id
+resource "aws_subnet" "sample_management_1c" {
+  vpc_id                          = aws_vpc.sample.id
   availability_zone               = "ap-northeast-1c"
-  cidr_block                      = var.vpc_settings["management_1c_cidr_block"]
+  cidr_block                      = local.vpc_settings["management_1c_cidr_block"]
   map_public_ip_on_launch         = false
   assign_ipv6_address_on_creation = false
-  tags                            = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-subnet-management-1c" }))
+  tags                            = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-management-1c" }))
 }
 
 #####################################
 # Internet Gateway Settings
 #####################################
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.vpc.id
-  tags   = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-igw" }))
+resource "aws_internet_gateway" "sample" {
+  vpc_id = aws_vpc.sample.id
+  tags   = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample" }))
 }
 
 #####################################
 # NAT Gateway Settings
 #####################################
-resource "aws_eip" "ngw_ip_1a" {
+resource "aws_eip" "sample_1a" {
   vpc  = true
-  tags = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-ngw-ip-1a" }))
+  tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-1a" }))
 }
 
-resource "aws_eip" "ngw_ip_1c" {
+resource "aws_eip" "sample_1c" {
   vpc  = true
-  tags = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-ngw-ip-1c" }))
+  tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-1c" }))
 }
 
-resource "aws_nat_gateway" "ngw_1a" {
-  allocation_id = aws_eip.ngw_ip_1a.id
-  subnet_id     = aws_subnet.public_1a.id
-  depends_on    = [aws_internet_gateway.igw]
-  tags          = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-ngw-1a" }))
+resource "aws_nat_gateway" "sample_1a" {
+  allocation_id = aws_eip.sample_1a.id
+  subnet_id     = aws_subnet.sample_public_1a.id
+  depends_on    = [aws_internet_gateway.sample]
+  tags          = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-1a" }))
 }
 
-resource "aws_nat_gateway" "ngw_1c" {
-  allocation_id = aws_eip.ngw_ip_1c.id
-  subnet_id     = aws_subnet.public_1c.id
-  depends_on    = [aws_internet_gateway.igw]
-  tags          = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-ngw-1c" }))
+resource "aws_nat_gateway" "sample_1c" {
+  allocation_id = aws_eip.sample_1c.id
+  subnet_id     = aws_subnet.sample_public_1c.id
+  depends_on    = [aws_internet_gateway.sample]
+  tags          = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-1c" }))
 }
 
 #####################################
 # Route Table Settings
 #####################################
-resource "aws_route_table" "igw_rtb" {
-  vpc_id = aws_vpc.vpc.id
+resource "aws_route_table" "sample_igw" {
+  vpc_id = aws_vpc.sample.id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
+    gateway_id = aws_internet_gateway.sample.id
   }
-  tags = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-igw-rtb" }))
+  tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-igw" }))
 }
 
-resource "aws_route_table" "ngw_rtb_1a" {
-  vpc_id = aws_vpc.vpc.id
+resource "aws_route_table" "sample_ngw_1a" {
+  vpc_id = aws_vpc.sample.id
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.ngw_1a.id
+    nat_gateway_id = aws_nat_gateway.sample_1a.id
   }
-  tags = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-ngw-rtb-1a" }))
+  tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-ngw-1a" }))
 }
 
-resource "aws_route_table" "ngw_rtb_1c" {
-  vpc_id = aws_vpc.vpc.id
+resource "aws_route_table" "sample_ngw_1c" {
+  vpc_id = aws_vpc.sample.id
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.ngw_1c.id
+    nat_gateway_id = aws_nat_gateway.sample_1c.id
   }
-  tags = merge(var.base_tags, tomap({ "Name" = "${var.base_name}-ngw-rtb-1c" }))
+  tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-ngw-1c" }))
 }
 
 #####################################
 # Route Table Association Settings
 #####################################
-resource "aws_route_table_association" "igw_rtba_public_1a" {
-  subnet_id      = aws_subnet.public_1a.id
-  route_table_id = aws_route_table.igw_rtb.id
+resource "aws_route_table_association" "sample_igw_public_1a" {
+  subnet_id      = aws_subnet.sample_public_1a.id
+  route_table_id = aws_route_table.sample_igw.id
 }
 
-resource "aws_route_table_association" "igw_rtba_public_1c" {
-  subnet_id      = aws_subnet.public_1c.id
-  route_table_id = aws_route_table.igw_rtb.id
+resource "aws_route_table_association" "sample_igw_public_1c" {
+  subnet_id      = aws_subnet.sample_public_1c.id
+  route_table_id = aws_route_table.sample_igw.id
 }
 
-resource "aws_route_table_association" "ngw_rtba_protected_1a" {
-  subnet_id      = aws_subnet.protected_1a.id
-  route_table_id = aws_route_table.ngw_rtb_1a.id
+resource "aws_route_table_association" "sample_ngw_protected_1a" {
+  subnet_id      = aws_subnet.sample_protected_1a.id
+  route_table_id = aws_route_table.sample_ngw_1a.id
 }
 
-resource "aws_route_table_association" "ngw_rtba_protected_1c" {
-  subnet_id      = aws_subnet.protected_1c.id
-  route_table_id = aws_route_table.ngw_rtb_1c.id
+resource "aws_route_table_association" "sample_ngw_protected_1c" {
+  subnet_id      = aws_subnet.sample_protected_1c.id
+  route_table_id = aws_route_table.sample_ngw_1c.id
 }
 
-resource "aws_route_table_association" "igw_rtba_management_1a" {
-  subnet_id      = aws_subnet.management_1a.id
-  route_table_id = aws_route_table.igw_rtb.id
+resource "aws_route_table_association" "sample_igw_management_1a" {
+  subnet_id      = aws_subnet.sample_management_1a.id
+  route_table_id = aws_route_table.sample_ngw_1a.id
 }
 
-resource "aws_route_table_association" "igw_rtba_management_1c" {
-  subnet_id      = aws_subnet.management_1c.id
-  route_table_id = aws_route_table.igw_rtb.id
+resource "aws_route_table_association" "sample_igw_management_1c" {
+  subnet_id      = aws_subnet.sample_management_1c.id
+  route_table_id = aws_route_table.sample_ngw_1c.id
 }
