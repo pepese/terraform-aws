@@ -51,23 +51,21 @@ resource "aws_autoscaling_group" "sample" {
     ignore_changes        = [load_balancers, target_group_arns]
   }
 
-  tags = [
-    {
-      "key"                 = "Service"
-      "value"               = "sample"
-      "propagate_at_launch" = true
-    },
-    {
-      "key"                 = "Name"
-      "value"               = "${local.base_name}-sample-v${aws_launch_template.sample.latest_version}"
-      "propagate_at_launch" = true
-    }
-  ]
+  tag {
+    key                 = "Service"
+    value               = "sample"
+    propagate_at_launch = true
+  }
+  tag {
+    key                 = "Name"
+    value               = "${local.base_name}-sample-v${aws_launch_template.sample.latest_version}"
+    propagate_at_launch = true
+  }
 }
 
 resource "aws_autoscaling_attachment" "sample" {
   autoscaling_group_name = aws_autoscaling_group.sample.id
-  alb_target_group_arn   = aws_lb_target_group.sample.arn
+  lb_target_group_arn    = aws_lb_target_group.sample.arn
 }
 
 #####################################

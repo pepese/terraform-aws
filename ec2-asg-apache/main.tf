@@ -6,7 +6,7 @@ terraform {
   required_providers {          // Provider の設定
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.0" // AWS Provider のバージョン
+      version = "~> 4.0" // AWS Provider のバージョン
     }
   }
   backend "s3" {                     // この設定で State ファイルが S3 に保存されます
@@ -94,7 +94,7 @@ locals {
 #####################################
 output "sample_alb" {
   value = {
-    dns_name     = aws_lb.sample.dns_name
+    dns_name = aws_lb.sample.dns_name
     # listener_arn = aws_lb_listener.sample_https.arn
     listener_arn = aws_lb_listener.sample_http.arn
   }

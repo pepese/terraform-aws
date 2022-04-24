@@ -37,10 +37,11 @@ provider "aws" {
 variable "profile" {}
 locals {
   // Common
-  region    = "ap-northeast-1"
-  system    = "system"
-  env       = "prd"
-  base_name = "${local.system}-${local.env}"
+  account_id = "xxxxxxxxxxxx"
+  region     = "ap-northeast-1"
+  system     = "system"
+  env        = "prd"
+  base_name  = "${local.system}-${local.env}"
 
   // VPC
   vpc_settings = {
@@ -63,13 +64,16 @@ locals {
   }
 
   // RDS
-  rds_settings = {
-    allocated_storage = 100
-    engine            = "mysql"
-    engine_version    = "5.7"
-    instance_class    = "db.m5.large"
-    username          = "admin"
-    password          = "password"
+  elasticache_settings = {
+    engine_version             = "6.x"
+    family                     = "redis6.x"
+    multi_az_enabled           = true
+    node_type                  = "cache.t4g.medium"
+    number_cache_clusters      = "2"
+    automatic_failover_enabled = true
+    maintenance_window         = "sun:16:00-sun:17:00" # UTC
+    snapshot_window            = "15:00-16:00"         # UTC
+    auth_token                 = "passwordpassword"    # must contain from 16 to 128 alphanumeric characters or symbols (excluding @, ", and /)
   }
 
   // CloudWatch

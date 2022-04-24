@@ -40,6 +40,9 @@ https://blog.pepese.com/terraform-naming/
 - `aurora-postgres`
   - Aurora PostgreSQL と DB アクセス用の簡易な Bastion を構築するプロジェクトです
   - ベースプロジェクトは `basic-flat`
+- `elasticache-redis`
+  - ElastiCache for Redis と DB アクセス用の簡易な Bastion を構築するプロジェクトです
+  - ベースプロジェクトは `basic-flat`
 - `ecs-appmesh-blue-green`
   - ECS と App Mesh を使って Blue/Green デプロイメントを行うことができるプロジェクトです
   - ベースプロジェクトは `basic-flat`

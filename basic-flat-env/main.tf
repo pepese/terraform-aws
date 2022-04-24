@@ -6,7 +6,7 @@ terraform {
   required_providers {          // Provider の設定
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.0"        // AWS Provider のバージョン
+      version = "~> 4.0" // AWS Provider のバージョン
     }
   }
   backend "s3" {                     // この設定で State ファイルが S3 に保存されます
