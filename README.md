@@ -45,6 +45,7 @@ https://blog.pepese.com/terraform-naming/
   - ベースプロジェクトは `basic-flat`
 - `ecs-appmesh-blue-green`
   - ECS と App Mesh を使って Blue/Green デプロイメントを行うことができるプロジェクトです
+  - VPC Endpoint もつけてます
   - ベースプロジェクトは `basic-flat`
 - `ecs`
   - ECS と RDS for PostgreSQL を構築するプロジェクトです

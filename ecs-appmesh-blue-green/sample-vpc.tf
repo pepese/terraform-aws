@@ -180,3 +180,111 @@ resource "aws_route_table_association" "sample_igw_management_1c" {
   subnet_id      = aws_subnet.sample_management_1c.id
   route_table_id = aws_route_table.sample_ngw_1c.id
 }
+
+#####################################
+# VPC Endopoint
+#####################################
+resource "aws_vpc_endpoint" "sample_ecr_dkr" {
+  vpc_id              = aws_vpc.sample.id
+  service_name        = "com.amazonaws.ap-northeast-1.ecr.dkr"
+  vpc_endpoint_type   = "Interface"
+  policy              = <<POLICY
+{
+    "Statement": [
+        {
+            "Action": "*",
+            "Effect": "Allow",
+            "Resource": "*",
+            "Principal": "*"
+        }
+    ]
+}
+POLICY
+  private_dns_enabled = true
+  subnet_ids = [
+    aws_subnet.sample_protected_1a.id,
+    aws_subnet.sample_protected_1c.id,
+  ]
+  security_group_ids = [aws_security_group.sample_vpc_endpoint.id]
+  tags               = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-ecr-dkr" }))
+}
+
+resource "aws_vpc_endpoint" "sample_ecr_api" {
+  vpc_id              = aws_vpc.sample.id
+  service_name        = "com.amazonaws.ap-northeast-1.ecr.api"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  policy              = <<POLICY
+{
+    "Statement": [
+        {
+            "Action": "*",
+            "Effect": "Allow",
+            "Resource": "*",
+            "Principal": "*"
+        }
+    ]
+}
+POLICY
+  subnet_ids = [
+    aws_subnet.sample_protected_1a.id,
+    aws_subnet.sample_protected_1c.id,
+  ]
+  security_group_ids = [aws_security_group.sample_vpc_endpoint.id]
+  tags               = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-ecr-api" }))
+}
+
+resource "aws_vpc_endpoint" "sample_logs" {
+  vpc_id              = aws_vpc.sample.id
+  service_name        = "com.amazonaws.ap-northeast-1.logs"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  policy              = <<POLICY
+{
+    "Statement": [
+        {
+            "Action": "*",
+            "Effect": "Allow",
+            "Resource": "*",
+            "Principal": "*"
+        }
+    ]
+}
+POLICY
+  subnet_ids = [
+    aws_subnet.sample_protected_1a.id,
+    aws_subnet.sample_protected_1c.id,
+  ]
+  security_group_ids = [aws_security_group.sample_vpc_endpoint.id]
+  tags               = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-logs" }))
+}
+
+resource "aws_security_group" "sample_vpc_endpoint" {
+  name        = "${local.base_name}-sample-vpc-endpoint"
+  description = "vpc-endpoint security group"
+  vpc_id      = aws_vpc.sample.id
+  tags        = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample-vpc-endpoint" }))
+}
+
+resource "aws_security_group_rule" "sample_vpc_endpoint_egress" {
+  security_group_id = aws_security_group.sample_vpc_endpoint.id
+
+  type        = "egress"
+  from_port   = 0
+  to_port     = 0
+  protocol    = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "sample_vpc_endpoint_ingress" {
+  security_group_id = aws_security_group.sample_vpc_endpoint.id
+
+  type      = "ingress"
+  from_port = 443
+  to_port   = 443
+  protocol  = "tcp"
+  cidr_blocks = [
+    aws_subnet.sample_protected_1a.id,
+    aws_subnet.sample_protected_1c.id,
+  ]
+}
