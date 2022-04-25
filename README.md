@@ -47,6 +47,10 @@ https://blog.pepese.com/terraform-naming/
   - ECS と App Mesh を使って Blue/Green デプロイメントを行うことができるプロジェクトです
   - VPC Endpoint もつけてます
   - ベースプロジェクトは `basic-flat`
+- `iam-forced-mfa`
+  - MFA 強制の IAM User を作成するプロジェクトです
+  - 作成する IAM User は `Developers` グループに所属し、 CodeArtifact 、 CloudWatch Logs へのアクセス権限があります
+  - ベースプロジェクトは `basic-flat`
 - `ecs`
   - ECS と RDS for PostgreSQL を構築するプロジェクトです
   - 要メンテ
