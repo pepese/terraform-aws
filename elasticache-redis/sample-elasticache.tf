@@ -30,16 +30,13 @@ resource "aws_elasticache_replication_group" "sample" {
       apply_immediately
     ]
   }
-  # 以下の Issue のため手動設定が必要 -> 「../docs/elasticache.md」
-  # Open Issue
-  # https://githubmemory.com/repo/hashicorp/terraform-provider-aws/issues/20023
-  # log_delivery {
-  #   format = "json"
-  #   delivery {
-  #     destination_type = "cloudwatch"
-  #     log_destination  = "/aws/elasticache/redis-slowlog"
-  #   }
-  # }
+  log_delivery_configuration {
+    destination      = aws_cloudwatch_log_group.sample_elasticache_slowlog.name
+    destination_type = "cloudwatch-logs"
+    log_format       = "json"
+    log_type         = "slow-log"
+  }
+
   tags = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample" }))
 }
 
