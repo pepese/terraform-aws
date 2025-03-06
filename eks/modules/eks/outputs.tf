@@ -3,23 +3,23 @@
 #####################################
 
 output "base_name" {
-  value = "${local.base_name}"
+  value = local.base_name
 }
 
 output "cluster_name" {
-  value = "${local.cluster_name}"
+  value = local.cluster_name
 }
 
 output "cluster_version" {
-  value = "${var.cluster_version}"
+  value = var.cluster_version
 }
 
 output "instance_type" {
-  value = "${var.instance_type}"
+  value = var.instance_type
 }
 
 output "base_tags" {
-  value = "${local.base_tags}"
+  value = local.base_tags
 }
 
 #####################################
@@ -27,43 +27,43 @@ output "base_tags" {
 #####################################
 
 output "vpc_id" {
-  value = "${aws_vpc.vpc.id}"
+  value = aws_vpc.vpc.id
 }
 
 output "public_subnet_a" {
-  value = "${aws_subnet.public_subnet_a.id}"
+  value = aws_subnet.public_subnet_a.id
 }
 
 output "public_subnet_c" {
-  value = "${aws_subnet.public_subnet_c.id}"
+  value = aws_subnet.public_subnet_c.id
 }
 
 output "public_subnet_d" {
-  value = "${aws_subnet.public_subnet_d.id}"
+  value = aws_subnet.public_subnet_d.id
 }
 
 output "cluster_subnet_a" {
-  value = "${aws_subnet.cluster_subnet_a.id}"
+  value = aws_subnet.cluster_subnet_a.id
 }
 
 output "cluster_subnet_c" {
-  value = "${aws_subnet.cluster_subnet_c.id}"
+  value = aws_subnet.cluster_subnet_c.id
 }
 
 output "cluster_subnet_d" {
-  value = "${aws_subnet.cluster_subnet_d.id}"
+  value = aws_subnet.cluster_subnet_d.id
 }
 
 output "private_subnet_a" {
-  value = "${aws_subnet.private_subnet_a.id}"
+  value = aws_subnet.private_subnet_a.id
 }
 
 output "private_subnet_c" {
-  value = "${aws_subnet.private_subnet_c.id}"
+  value = aws_subnet.private_subnet_c.id
 }
 
 output "private_subnet_d" {
-  value = "${aws_subnet.private_subnet_d.id}"
+  value = aws_subnet.private_subnet_d.id
 }
 
 #####################################
@@ -71,11 +71,11 @@ output "private_subnet_d" {
 #####################################
 
 output "eks_master_sg_id" {
-  value = "${aws_security_group.eks_master_sg.id}"
+  value = aws_security_group.eks_master_sg.id
 }
 
 output "eks_worker_sg_id" {
-  value = "${aws_security_group.eks_worker_sg.id}"
+  value = aws_security_group.eks_worker_sg.id
 }
 
 #####################################
@@ -83,7 +83,7 @@ output "eks_worker_sg_id" {
 #####################################
 
 output "eks_asg_id" {
-  value = "${aws_autoscaling_group.eks_asg.id}"
+  value = aws_autoscaling_group.eks_asg.id
 }
 
 #####################################
@@ -91,11 +91,11 @@ output "eks_asg_id" {
 #####################################
 
 output "eks_alb_arn" {
-  value = "${aws_alb.eks_alb.arn}"
+  value = aws_alb.eks_alb.arn
 }
 
 output "eks_alb_sg_id" {
-  value = "${aws_security_group.eks_alb_sg.id}"
+  value = aws_security_group.eks_alb_sg.id
 }
 
 #####################################
@@ -103,18 +103,18 @@ output "eks_alb_sg_id" {
 #####################################
 
 output "eks_master_role_id" {
-  value = "${aws_iam_role.eks_master_role.id}"
+  value = aws_iam_role.eks_master_role.id
 }
 output "eks_master_role_name" {
-  value = "${aws_iam_role.eks_master_role.name}"
+  value = aws_iam_role.eks_master_role.name
 }
 
 output "eks_worker_role_id" {
-  value = "${aws_iam_role.eks_worker_role.id}"
+  value = aws_iam_role.eks_worker_role.id
 }
 
 output "eks_worker_role_name" {
-  value = "${aws_iam_role.eks_worker_role.name}"
+  value = aws_iam_role.eks_worker_role.name
 }
 
 #####################################
@@ -167,9 +167,9 @@ CONFIGMAPAWSAUTH
 }
 
 output "kubeconfig" {
-  value = "${local.kubeconfig}"
+  value = local.kubeconfig
 }
 
 output "configmap" {
-  value = "${local.eks_configmap}"
+  value = local.eks_configmap
 }

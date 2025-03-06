@@ -24,6 +24,6 @@ resource "aws_alb" "eks_alb" {
 
 resource "aws_security_group" "eks_alb_sg" {
   name   = "${local.base_name}-eks-alb-sg"
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = aws_vpc.vpc.id
   tags   = merge(local.base_tags, map("Name", "${local.base_name}-eks-alb-sg"))
 }

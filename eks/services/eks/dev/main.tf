@@ -26,11 +26,11 @@ module "eks" {
 
 // モジュール内の output は main.tf から読み出さないと state に記録されない
 output "kubeconfig" {
-  value = "${module.eks.kubeconfig}"
+  value = module.eks.kubeconfig
 }
 
 output "configmap" {
-  value = "${module.eks.configmap}"
+  value = module.eks.configmap
 }
 
 // data "template_file" "cluster" {

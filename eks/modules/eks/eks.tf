@@ -1,7 +1,7 @@
 resource "aws_eks_cluster" "cluster" {
-  name     = "${local.cluster_name}"
-  role_arn = "${aws_iam_role.eks_master_role.arn}"
-  version  = "${local.cluster_version}"
+  name     = local.cluster_name
+  role_arn = aws_iam_role.eks_master_role.arn
+  version  = local.cluster_version
   vpc_config {
     endpoint_private_access = false
     endpoint_public_access  = true
@@ -37,9 +37,9 @@ data "aws_ami" "eks_worker" {
 
 resource "aws_launch_configuration" "eks_lc" {
   associate_public_ip_address = false
-  iam_instance_profile        = "${aws_iam_instance_profile.eks_worker_role_profile.id}"
-  image_id                    = "${data.aws_ami.eks_worker.image_id}"
-  instance_type               = "${var.instance_type}"
+  iam_instance_profile        = aws_iam_instance_profile.eks_worker_role_profile.id
+  image_id                    = data.aws_ami.eks_worker.image_id
+  instance_type               = var.instance_type
   name_prefix                 = "eks_worker"
   # key_name                    = "${var.key_name}" # ssh key
   root_block_device {
@@ -47,7 +47,7 @@ resource "aws_launch_configuration" "eks_lc" {
     volume_size = "20"
   }
   security_groups  = ["${aws_security_group.eks_worker_sg.id}"]
-  user_data_base64 = "${base64encode(local.userdata)}"
+  user_data_base64 = base64encode(local.userdata)
   lifecycle {
     create_before_destroy = true
   }
@@ -55,10 +55,10 @@ resource "aws_launch_configuration" "eks_lc" {
 
 resource "aws_autoscaling_group" "eks_asg" {
   name                 = "${local.base_name}-eks-asg"
-  desired_capacity     = "${var.asg_desired_capacity}"
-  launch_configuration = "${aws_launch_configuration.eks_lc.id}"
-  max_size             = "${var.asg_max_size}"
-  min_size             = "${var.asg_min_size}"
+  desired_capacity     = var.asg_desired_capacity
+  launch_configuration = aws_launch_configuration.eks_lc.id
+  max_size             = var.asg_max_size
+  min_size             = var.asg_min_size
   vpc_zone_identifier  = ["${aws_subnet.cluster_subnet_a.id}", "${aws_subnet.cluster_subnet_c.id}", "${aws_subnet.cluster_subnet_d.id}"]
   tag {
     key                 = "Project"

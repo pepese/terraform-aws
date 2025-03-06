@@ -2,28 +2,11 @@
 # VPC Settings
 #####################################
 resource "aws_vpc" "cmn_vpc" {
-  cidr_block                       = var.vpc_settings["vpc_cidr_block"]
-  instance_tenancy                 = "default"
-  enable_dns_support               = true
-  enable_dns_hostnames             = true
-  enable_classiclink               = false
-  enable_classiclink_dns_support   = false
-  assign_generated_ipv6_cidr_block = false
-  tags                             = merge(tomap({ "Service" = "cmn" }), tomap({ "Name" = "${var.base_name}-cmn-vpc" }))
-}
-
-#####################################
-# VPC DHCP Option Settings
-#####################################
-resource "aws_vpc_dhcp_options" "cmn_vpc_dhcp" {
-  domain_name_servers = ["10.0.0.2", "169.254.169.253"]
-  ntp_servers         = ["169.254.169.123"]
-  tags                = merge(tomap({ "Service" = "cmn" }), tomap({ "Name" = "${var.base_name}-cmn-vpc-dhcp" }))
-}
-
-resource "aws_vpc_dhcp_options_association" "cmn_vpc_dhcp_association" {
-  vpc_id          = aws_vpc.cmn_vpc.id
-  dhcp_options_id = aws_vpc_dhcp_options.cmn_vpc_dhcp.id
+  cidr_block = var.vpc_settings["vpc_cidr_block"]
+  tags = {
+    Service = "cmn"
+    Name    = "${var.base_name}-cmn-vpc"
+  }
 }
 
 #####################################

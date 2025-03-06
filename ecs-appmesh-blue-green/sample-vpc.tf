@@ -2,10 +2,11 @@
 # VPC Settings
 #####################################
 resource "aws_vpc" "sample" {
-  cidr_block           = local.vpc_settings["vpc_cidr_block"]
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-  tags                 = merge(tomap({ "Service" = "sample" }), tomap({ "Name" = "${local.base_name}-sample" }))
+  cidr_block = local.vpc_settings["vpc_cidr_block"]
+  tags = {
+    Service = "sample"
+    Name    = "${local.base_name}-sample"
+  }
 }
 
 #####################################
