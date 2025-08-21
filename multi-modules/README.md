@@ -85,15 +85,17 @@ terraform {
 `tags` 属性のある `resource` には以下のタグを必ずつける。
 
 - `System` ：システムを識別可能な文字列
-- `Service` : システム内のコンポーネント・マイクロサービスなどを識別するサービス名
+- `Domain` : 対象のAWSリソースが所属するシステム内のコアドメイン・サブドメインの名称
 - `Env` ：環境名（dev, tst, stg, prd）
 - `Terraform` ：`“true”`、 Terraform で作成した目印
 - `Name` ：AWSリソース名の命名規則に従う
 
+ただし、 `System` 、 `Env` 、 `Terraform` については、モジュール呼び出し側のプロバイダー設定の `default_tags` にて設定するため、各モジュールでは `Domain` 、 `Name` を設定する。
+
 ### AWSリソースID
 
 ケバブケースで命名する。詳細は以下の通り。  
-なお、 `[service]` はコンポーネント・マイクロサービスなどの名称、 `[resourceType]` はAWSリソースタイプを表す。
+なお、 `[service]` はマイクロサービス・アプリケーションなどの名称、 `[resourceType]` はAWSリソースタイプを表す。
 
 - CloudWatch/AutoScalingポリシー以外
   - 『**[service]**』
@@ -175,11 +177,11 @@ terraform {
 
 ### AWSリソース名
 
-AWSリソース名は、resource の name 属性、AWSリソースタグの Name を指し、それぞれ異なることが無い様に命名する。  
-なお aws_db_instance のように identifier を使用しなければならないケースは注意すること。
+AWSリソース名は、resource の `name` 属性、AWSリソースタグの `Name` を指し、それぞれ異なることが無い様に命名する。  
+なお `aws_db_instance` のように `identifier` を使用しなければならないケースは注意すること。
 
 ケバブケースで命名する。詳細は以下の通り。  
-なお、`[system]` はシステム名・ID、 `[env]` は環境名、 `[service]` はコンポーネント・マイクロサービスなどの名称、 `[resourceType]` はAWSリソースタイプを表す。
+なお、`[system]` はシステム名・ID、 `[env]` は環境名、 `[service]` はマイクロサービス・アプリケーションなどの名称、 `[resourceType]` はAWSリソースタイプを表す。
 
 - CloudWatch/AutoScalingポリシー/SSMパラメータ以外
   - 『**[system]-[env]-[service]**』、『**[system]-[env]-[service]{-任意}**』
